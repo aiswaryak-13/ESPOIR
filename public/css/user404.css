@@ -1,0 +1,30 @@
+
+    body {
+      background-color: #fff;
+      color: #000;
+      height: 100vh;
+      margin: 0;
+      text-align: center;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .error-code {
+      font-size: 8rem;
+      font-weight: bold;
+      color: rgb(170, 16, 16);
+    }
+
+    .error-message {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .btn-outline-dark {
+      border-radius: 0;
+      border-width: 2px;
+    }
+
+    a {
+      text-decoration: none;
+    }
+  
