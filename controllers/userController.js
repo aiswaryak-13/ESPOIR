@@ -4,6 +4,8 @@ const env = require('dotenv').config();
 const bcrypt = require('bcrypt');
 
 
+
+
 const pageNotFound = async (req,res) => {
   try {
     res.render('user/page_404');
@@ -16,7 +18,8 @@ const pageNotFound = async (req,res) => {
 
 const loadHomepage = async(req,res)=>{
   try {
-    return res.render('user/home');
+    const user = req.user || null;
+    return res.render('user/home',{user});
   } catch (error) {
     console.log(`Home page not found!!`);
     res.status(500).send('Server error');
@@ -160,7 +163,8 @@ const verifyOtp = async (req,res) => {
 
       await saveUserData.save();
       req.session.user = saveUserData._id;
-      res.json({success:true, redirectUrl:'/login'})
+      //res.json({success:true, redirectUrl:'/login'})
+      res.redirect('/login');
     }else{
       res.status(400).json({success:false,message:"Invalid OTP, Try again"});
     }
@@ -197,6 +201,48 @@ const resendOtp = async (req,res) => {
 }
 
 
+const loadLogin = async (req,res) => {
+  try {
+    if(!req.session.user){
+      return res.render('user/login');
+    }else{
+      res.redirect('/');
+    }
+  } catch (error) {
+    res.redirect('/pageNotFound')
+  }
+}
+
+const login = async (req,res) => {
+  try {
+    const {email,password} = req.body;
+    const findUser = await User.findOne({isAdmin:0,email:email});
+
+    if(!findUser){
+      return res.render('user/login',{message:"User not found"});
+    }
+
+    if(findUser.isBlocked){
+      return res.render('user/login',{message:"User is blocked by Admin"});
+    }
+
+    const passwordMatch = await bcrypt.compare(password,findUser.password);
+
+    if(!passwordMatch){
+      return res.render('user/login',{message:"Incorrect password"});
+    }
+
+    req.session.user = findUser._id;
+    res.redirect('/');
+
+  } catch (error) {
+    
+    console.error('login error',error);
+    res.render('user/login',{message:"login failed. Try later"});
+
+  }
+}
+
 module.exports = {
   loadHomepage,
   pageNotFound,
@@ -205,5 +251,7 @@ module.exports = {
   signup,
   verifyOtp,
   resendOtp,
+  loadLogin,
+  login,
 
 }
