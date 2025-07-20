@@ -1,0 +1,61 @@
+
+body {
+  font-family: Arial, sans-serif;
+}
+
+.navbar-brand {
+  font-family: 'Aboreto', cursive;
+}
+
+.hero-heading {
+  font-family: 'Aclonica', cursive;
+  font-size: 3rem;
+}
+
+.hero-sub {
+  font-size: 1rem;
+}
+
+.section-heading {
+  font-family: 'Aclonica', cursive;
+}
+
+.capsule-btn{
+  border-radius: 50px;
+  padding: 0.5rem 3rem;
+  border: 1px solid black;
+  color: white;
+}
+
+.view-all-btn{
+   border-radius: 50px;
+   padding: .5rem 5rem;
+} 
+
+.black-band {
+  background-color: #000;
+  color: white;
+  padding: 2.5rem 0;
+  margin-top: 1.5rem;
+}
+
+.black-band .row .col{
+    text-align: center;
+    font-size: 1.25rem;
+} 
+
+.sticky-top-banner {
+  background-color: black;
+  color: white;
+  text-align: center;
+  padding: 0.5rem;
+}
+
+.search-bar {
+background-color: #f3f3f3;
+border: none;
+border-radius: 5rem;
+padding: 0.5rem 1.5rem;
+color: #333;
+}
+

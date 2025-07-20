@@ -1,30 +1,78 @@
-<header class="header">
-  
-  <div class="container">
-      <div class="row">
-          <div class="col-lg-3 col-md-3">
-              <div class="header__logo">
-                  <a href="./index.html"><img src="img/logo.png" alt=""></a>
-              </div>
-          </div>
-          <div class="col-lg-6 col-md-6">
-              <nav class="header__menu mobile-menu">
-                  <ul>
-                      <li class="active"><a href="./index.html">Home</a></li>
-                      <li><a href="./shop.html">Shop</a></li>
-                </ul>
-              </nav>
-          </div>
-          <div class="col-lg-3 col-md-3">
-              <div class="header__nav__option d-flex align-items-center justify-content-end flex-wrap gap-2">
-                  <a href="/signup" class="sign-in-link text-dark">Sign Up</a>
-                  <a href="/login" class="sign-in-link text-dark">Log in</a>
-                  <a href="#" class="search-switch"><img src="img/icon/search.png" alt=""></a>
-                  <a href="#"><img src="img/icon/heart.png" alt=""></a>
-                  <a href="#"><img src="img/icon/cart.png" alt=""> <span>0</span></a>
-              </div>
-          </div>
-      </div>
-      <div class="canvas__open"><i class="fa fa-bars"></i></div>
+<!-- Sticky Top Banner -->
+<% if (!user) { %>
+  <div class="sticky-top-banner sticky-top">
+    Sign up and get 20% off to your first order. <a href="/signup" class="text-white text-decoration-underline">Sign Up Now</a>
   </div>
-</header>
+  <% } %>
+
+
+<!-- Header Navbar -->
+
+<nav class="navbar navbar-expand-lg py-3">
+  <div class="container" style="max-width: 1400px;">
+
+    <!-- Left: Brand -->
+    <a class="navbar-brand me-3" href="#">ESPOIR</a>
+
+    <!-- Toggler for mobile -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Center: Navbar links and search bar -->
+    <div class="collapse navbar-collapse justify-content-center" id="mainNavbar">
+      <ul class="navbar-nav me-3">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Shop</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">All Products</a></li>
+            <li><a class="dropdown-item" href="#">Plates</a></li>
+            <li><a class="dropdown-item" href="#">Cups</a></li>
+            <li><a class="dropdown-item" href="#">Bowls</a></li>
+            <li><a class="dropdown-item" href="#">Spoons</a></li>
+            <li><a class="dropdown-item" href="#">Dinnerset Gifting</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">About Us</a>
+        </li>
+      </ul>
+
+      <!-- Search -->
+      <form class="d-flex w-100 justify-content-center px-3" style="max-width: 500px;">
+        <input class="form-control w-100 search-bar" type="search" placeholder="Search for products" aria-label="Search">
+      </form>
+    </div>
+
+    <!-- Right Side: User Actions -->
+    <div class="d-flex align-items-center ms-3">
+
+   <% if(user){ %>
+    <!-- Cart icon -->
+    <a href="/cart" class="me-3">
+      <img src="https://cdn-icons-png.flaticon.com/512/1170/1170678.png" width="24" alt="Cart">
+    </a>
+
+    <!-- profile icon -->
+    <a href="/profile" class="me-3">
+      <img src="https://cdn-icons-png.flaticon.com/512/1144/1144760.png" width="24" alt="Profile">
+    </a>
+
+
+    <!-- Wishlist icon -->
+    <a href="/wishlist" class="me-3">
+      <img src="https://cdn-icons-png.flaticon.com/512/1077/1077035.png" width="24" alt="Wishlist">
+    </a>
+
+  <% } else { %>
+    <!-- If not logged in -->
+
+    <a href="/login" class="ms-3">
+      <img src="https://cdn-icons-png.flaticon.com/512/1144/1144760.png" width="30" alt="Profile">
+    </a>
+  <% } %>
+
+    </div>
+
+  </div>
+</nav>
