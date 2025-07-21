@@ -6,14 +6,10 @@ const bcrypt = require('bcrypt');
 
 
 
-const pageNotFound = async (req,res) => {
-  try {
-    res.render('user/page_404');
-  } catch (error) {
-    res.redirect('/pageNotFound');
-  }
+const pageNotFound = (req, res) => {
+  const user = req.session.user || null;
+  res.status(404).render('user/page_404', { user });
 }
-
 
 
 const loadHomepage = async (req, res) => {

@@ -23,3 +23,47 @@
       text-align: center;
       margin-top: 40px;
     }
+
+
+    /* dashboard.css */
+
+/* Sidebar base */
+.sidebar {
+  width: 220px;
+  background-color: #ffffff;
+  color: #000000;
+  border-right: 1px solid #dee2e6;
+}
+
+/* Sidebar heading */
+.sidebar h4 {
+  font-family: 'Outfit', sans-serif;
+  color: #000;
+}
+
+/* Nav links */
+.sidebar .nav-link {
+  color: #000000;
+  font-size: 15px;
+  padding: 10px;
+  transition: all 0.2s ease-in-out;
+}
+
+/* On hover */
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
+  background-color: #000000;
+  color: #ffffff;
+  border-radius: 5px;
+}
+
+
+.sidebar .nav-link .text{
+  color: #dc3545;
+}
+
+.sidebar .nav-link.text:hover {
+  background-color: #dc3545;
+  color: #ffffff;
+}
+

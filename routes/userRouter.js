@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/user/userController');
 const passport = require('passport');
+const {userAuth} = require('../middlewares/auth');
 
 router.get('/pageNotFound',userController.pageNotFound);
 router.get('/',userController.loadHomepage);
@@ -32,7 +33,7 @@ router.post('/login',userController.login);
 router.get('/logout',userController.logout);
 
 
-router.get('/profile',userController.loadProfile);
+router.get('/profile',userAuth,userController.loadProfile);
 router.get('/forgotPassword',userController.forgotPassword);
 
 module.exports = router;

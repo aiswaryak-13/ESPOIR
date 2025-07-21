@@ -6,38 +6,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Outfit&family=Inter&display=swap" rel="stylesheet">
+  
+  <link href="https://fonts.googleapis.com/css2?family=Aboreto&family=Outfit&family=Inter&display=swap" rel="stylesheet">
+
   <!-- Custom CSS -->
   <link href="/css/admin/dashboard.css" rel="stylesheet">
   
 </head>
 <body>
+
+ <!-- Top Header -->
+ <%- include ('../../views/partials/admin/header') %>
+
+
+
   <div class="d-flex">
     <!-- Sidebar -->
-    <nav class="sidebar p-3 text-white">
-      <h4 class="text-center mb-4">Espoir Admin</h4>
-      <ul class="nav flex-column">
-        <li class="nav-item"><a class="nav-link active" href="#">Dashboard</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Orders</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Products</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Categories</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Coupons</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Customers</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Sales Reports</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Refund / Return</a></li>
-        <li class="nav-item"><a class="nav-link text-danger" href="#">Sign Out</a></li>
-      </ul>
-    </nav>
+    
+    <%- include('../partials/admin/sidebar') %>
 
     <!-- Main Content -->
     <main class="flex-grow-1 p-4">
-      <div class="d-flex justify-content-between align-items-center mb-4">
+      <div class="d-flex justify-content-center align-items-center mb-4">
         <h2>Dashboard</h2>
-        <span class="text-muted">© 2025 | ESPOIR | We Give You Style.</span>
       </div>
 
-      <!-- KPI Cards -->
+      <!-- Cards -->
       <div class="row g-3 mb-4">
         <div class="col-md-3">
           <div class="card p-3 shadow-sm">
@@ -75,83 +74,63 @@
         <canvas id="revenueChart" height="100"></canvas>
       </div>
 
-      <!-- Statistics -->
-      <div class="row g-3 mb-4">
-        <div class="col-md-4">
-          <div class="card p-3 text-center shadow-sm">
-            <h6>Total Order</h6>
-            <h2>81%</h2>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card p-3 text-center shadow-sm">
-            <h6>Customer Growth</h6>
-            <h2>22%</h2>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card p-3 text-center shadow-sm">
-            <h6>Total Revenue</h6>
-            <h2>62%</h2>
-          </div>
-        </div>
-      </div>
-
-      <!-- Recent Orders Table -->
-      <div class="card p-4 shadow-sm">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h5>Recent Orders</h5>
-          <button class="btn btn-outline-primary btn-sm">Save Report</button>
-        </div>
-        <table class="table table-striped table-hover">
-          <thead class="table-dark">
-            <tr>
-              <th>#</th>
-              <th>Customer</th>
-              <th>Amount</th>
-              <th>Status</th>
-              <th>Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- <% orders.forEach((order, index) => { %>
-              <tr>
-                <td><%= index + 1 %></td>
-                <td><%= order.username %></td>
-                <td>$ <%= order.amount %></td>
-                <td><%= order.status %></td>
-                <td><%= order.date %></td>
-              </tr>
-            <% }) %> -->
-          </tbody>
-        </table>
-      </div>
+      
 
       <!-- Footer -->
-      <footer class="mt-5">
-        <p>© 2025 | ESPOIR | All Rights Reserved. | We Give You Style.</p>
-      </footer>
+      
     </main>
   </div>
+  
+  <%- include ('../../views/partials/admin/footer') %>
 
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
   <script>
-    const ctx = document.getElementById('revenueChart').getContext('2d');
-    new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-        datasets: [{
-          label: 'Revenue',
-          data: [10000, 12000, 15000, 17000, 20000, 30000, 40000],
-          backgroundColor: 'rgba(13, 110, 253, 0.1)',
-          borderColor: 'rgba(13, 110, 253, 1)',
-          tension: 0.4,
-          fill: true
-        }]
+    const toggleBtn = document.getElementById('toggleSidebar');
+    const sidebar = document.getElementById('adminSidebar');
+  
+    function showSidebar() {
+      sidebar.style.display = 'block';
+    }
+  
+    function hideSidebar() {
+      if (window.innerWidth < 768) {
+        sidebar.style.display = 'none';
+      }
+    }
+  
+    toggleBtn.addEventListener('click', () => {
+      const isVisible = getComputedStyle(sidebar).display === 'block';
+      sidebar.style.display = isVisible ? 'none' : 'block';
+    });
+  
+    // Hide sidebar when clicking outside (mobile only)
+    document.addEventListener('click', (e) => {
+      if (window.innerWidth < 768 && !sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
+        hideSidebar();
+      }
+    });
+  
+    // Restore sidebar on resize
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 768) {
+        showSidebar();
+      } else {
+        hideSidebar();
+      }
+    });
+  
+    // Initialize correctly
+    window.addEventListener('DOMContentLoaded', () => {
+      if (window.innerWidth < 768) {
+        hideSidebar();
+      } else {
+        showSidebar();
       }
     });
   </script>
+  
+
 </body>
 </html>

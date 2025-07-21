@@ -2,6 +2,11 @@ const User = require('../../models/userSchema');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
+
+const pageNotFound = async (req,res) => {
+  res.render('admin/pageError');
+}
+
 const loadLogin = async (req,res) => {
   try {
     if(req.session.admin){
@@ -26,18 +31,17 @@ const login = async (req,res) => {
       const passwordMatch = bcrypt.compare(password,admin.password);
 
       if(passwordMatch){
-        req.session.loginError = 'Invalid credentials';
+        req.session.admin = true;
         return res.redirect('/admin');
       }else{
-        return res.redirect('/admin/login',{ message: 'Invalid credentials' })
+        return res.redirect('/login');
       }
     }else{
-      req.session.loginError = 'Invalid credentials';
-      return res.redirect('/admin/login');
+      return res.redirect('/login');
     }
   } catch (error) {
     console.log('login error',error);
-    return res.redirect('/admin/pageNotFound');
+    return res.redirect('/pageNotFound');
   }
 }
 
@@ -47,7 +51,7 @@ const loadDashboard = async(req,res)=>{
     try {
      return res.render('admin/dashboard');
     } catch (error) {
-     return res.redirect('/admin/pageNotFound');
+     return res.redirect('/pageNotFound');
      console.log('Error',error.message);
     }
   }
@@ -58,5 +62,6 @@ module.exports = {
   loadLogin,
   login,
   loadDashboard,
+  pageNotFound,
 
 }

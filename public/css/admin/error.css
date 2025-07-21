@@ -1,0 +1,29 @@
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+  font-family: 'Aboreto', cursive;
+  font-size: 2.5rem;
+  margin-top: 40px;
+}
+
+.error-text {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #000000;
+}
+
+.footer-text {
+  font-size: 0.9rem;
+  color: #6c757d;
+  font-family: 'Outfit', sans-serif;
+}
+
+.btn {
+  font-family: 'Rubik', sans-serif;
+}
