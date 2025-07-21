@@ -149,37 +149,48 @@ try {
 }
 
 
-const verifyOtp = async (req,res) => {
-  
+const verifyOtp = async (req, res) => {
   try {
-    const {otp} = req.body;
-    console.log(otp);
+    const { otp } = req.body;
+    console.log("Submitted OTP:", otp);
+    console.log("Session OTP:", req.session.userOtp);
 
-    if(otp === req.session.userOtp){
+    if (otp === req.session.userOtp) {
       const user = req.session.userData;
-      const passwordHash = await SecurePassword(user.password); 
+      const passwordHash = await SecurePassword(user.password);
 
       const saveUserData = new User({
-        name:user.name,
-        gender:user.gender,
-        email:user.email,
-        phone:user.phone,
-        password:passwordHash,
-      })
+        name: user.name,
+        gender: user.gender,
+        email: user.email,
+        phone: user.phone,
+        password: passwordHash,
+      });
 
-      await saveUserData.save();
-      req.session.user = saveUserData._id;
-      //res.json({success:true, redirectUrl:'/login'})
-      res.redirect('/login');
-    }else{
-      res.status(400).json({success:false,message:"Invalid OTP, Try again"});
+      const savedUser = await saveUserData.save();
+
+      // Set session
+      req.session.user = {
+        _id: savedUser._id,
+        name: savedUser.name,
+        email: savedUser.email,
+      };
+
+      // Return success for AJAX
+      return res.json({
+        success: true,
+        message: "OTP verified successfully",
+        redirectUrl: "/",
+      });
+    } else {
+      return res.status(400).json({ success: false, message: "Invalid OTP, try again" });
     }
-    
   } catch (error) {
-    console.error('Error verifying OTP',error);
-    res.status(500).json({success:false,message:"An error occured"});
+    console.error("Error verifying OTP", error);
+    return res.status(500).json({ success: false, message: "An error occurred during verification" });
   }
-}
+};
+
 
 
 const resendOtp = async (req,res) => {
@@ -271,7 +282,7 @@ const logout = async (req,res) => {
         console.log('Session destruction error',err.message);
         return res.redirect('/pageNotFound');
       }
-      return res.redirect('/login');
+      return res.redirect('/');
     })
   } catch (error) {
     console.log('Logout error');
