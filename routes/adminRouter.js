@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const adminController = require('../controllers/admin/adminController');
+const adminController = require('../controllers/adminController');
+const customerController = require('../controllers/customerController');
 const {adminAuth} = require('../middlewares/auth');
 
 router.get('/pageNotFound',adminController.pageNotFound);
@@ -10,5 +11,9 @@ router.get('/',adminAuth,adminController.loadDashboard);
 
 router.get('/logout',adminController.logout);
 
+router.get('/customers',adminAuth,customerController.customerInfo);
+
+router.get('/blockCustomer',adminAuth,customerController.customerBlocked);
+router.get('/unblockCustomer',adminAuth,customerController.customerUnblocked);
 
 module.exports = router;
