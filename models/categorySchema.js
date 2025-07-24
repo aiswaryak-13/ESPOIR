@@ -7,8 +7,8 @@ const categorySchema = new Schema({
     required:true,
     unique:true
   },
-  description:{
-    type:String,
+  stocks:{
+    type:Number,
     required:true
   },
   isListed:{

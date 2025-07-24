@@ -1,46 +1,39 @@
 const User = require('../models/userSchema');
 
-const customerInfo = async(req,res)=>{
+const customerInfo = async (req, res) => {
   try {
-    let search = "";
-    if(req.query.search){
-      search = req.query.search;
-    }
-
-    let page=1;
-    if(req.query.page){
-      page = req.query.page;
-    }
-
-    const limit=3;
-    const UserData = await User.find({
-      isAdmin:false,
-      $or:[
-        {name:{$regex:".*"+search+".*"}},
-        {email:{$regex:".*"+search+".*"}}
-      ],
-    })
-    .limit(limit*1)
-    .skip((page-1)*limit)
-    .exec();
-
+    const search = req.query.search?.trim() || "";
+    const page = parseInt(req.query.page) || 1;
+    const limit = 3;
     const status = req.query.status || "all";
+
+    const regex = new RegExp(search, "i");
+
+    // Build base query
+    const query = {
+      isAdmin: false,
+      $or: [
+        { name: { $regex: regex } },
+        { email: { $regex: regex } }
+      ]
+    };
+
+    // Add status filter
     if (status === 'active') {
       query.isBlocked = false;
     } else if (status === 'blocked') {
       query.isBlocked = true;
     }
 
-    const count = await User.find({
-    isAdmin:false,
-      $or:[
-        {name:{$regex:".*"+search+".*"}},
-        {email:{$regex:".*"+search+".*"}}
-      ],
+    //  Get filtered users with pagination and sorting
+    const UserData = await User.find(query)
+      .sort({ createdAt: -1 }) //  Descending order
+      .limit(limit)
+      .skip((page - 1) * limit)
+      .exec();
 
-    }).countDocuments();
-
-    
+    // Total count for pagination
+    const count = await User.countDocuments(query);
 
     res.render('admin/customerManagement', {
       users: UserData,
@@ -50,37 +43,34 @@ const customerInfo = async(req,res)=>{
       status
     });
 
+  } catch (error) {
+    console.error(error);
+    res.redirect('/pageNotFound');
+  }
+};
 
+const customerBlocked = async (req, res) => {
+  try {
+    const id = req.query.id;
+    await User.updateOne({ _id: id }, { $set: { isBlocked: true } });
+    res.redirect('/admin/customers');
   } catch (error) {
     res.redirect('/pageNotFound');
   }
-}
+};
 
-const customerBlocked = async(req,res)=>{
-  try{
-
-    let id = req.query.id;
-    await User.updateOne({_id:id},{$set:{isBlocked:true}});
+const customerUnblocked = async (req, res) => {
+  try {
+    const id = req.query.id;
+    await User.updateOne({ _id: id }, { $set: { isBlocked: false } });
     res.redirect('/admin/customers');
-  }catch(error){
+  } catch (error) {
     res.redirect('/pageNotFound');
   }
-}
-
-const customerUnblocked = async(req,res)=>{
-  try{
-
-    let id = req.query.id;
-    await User.updateOne({_id:id},{$set:{isBlocked:false}});
-    res.redirect('/admin/customers');
-  }catch(error){
-    res.redirect('/pageNotFound');
-  }
-}
+};
 
 module.exports = {
   customerInfo,
   customerBlocked,
-  customerUnblocked,
-
-}
+  customerUnblocked
+};
