@@ -13,19 +13,32 @@ router.post('/verifyOtp',userController.verifyOtp);
 router.post('/resendOtp',userController.resendOtp);
 
 
-router.get('/auth/google',passport.authenticate('google',{scope:['profile','email'],
-   prompt: 'consent'
-}));
 
-router.get('/auth/google/callback',passport.authenticate('google',{failureRedirect:'/signup'}),(req,res)=>{
-  req.session.user = {
-    _id: req.user._id,
-    name: req.user.name,
-    email: req.user.email
-  };
+router.get('/auth/google/signup', (req, res, next) => {
+  req.session.googleSignup = true;
+  next();
+}, passport.authenticate('google', { scope: ['profile', 'email'], prompt: 'consent' }));
 
-  res.redirect('/');
-});
+
+router.get('/auth/google/login', (req, res, next) => {
+  req.session.googleSignup = false;
+  next();
+}, passport.authenticate('google', { scope: ['profile', 'email'], prompt: 'consent' }));
+
+
+router.get('/auth/google/callback',
+  passport.authenticate('google', {
+    failureRedirect: '/signup?error=Email not found'
+  }),
+  (req, res) => {
+    req.session.user = {
+      _id: req.user._id,
+      name: req.user.name,
+      email: req.user.email
+    };
+    res.redirect('/');
+  }
+);
 
 
 router.get('/login',userController.loadLogin);

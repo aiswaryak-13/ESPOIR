@@ -19,12 +19,11 @@
 
 <main class="container d-flex align-items-center justify-content-center min-vh-100 my-5">
   <section class="row signup-container w-100" style="max-width: 950px;">
-
     <!-- Left Pane: Form -->
     <div class="col-md-6 left-pane">
       <div class="logo-text mb-2">ESPOIR</div>
       <div class="d-grid mb-3">
-        <a href="/auth/google" class="btn google-btn">
+        <a href="/auth/google/signup" class="btn google-btn">
           <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="Google Logo" />
           Sign up with Google
         </a>
@@ -34,7 +33,7 @@
 
       <div class="form-heading">Create Account</div>
 
-      <% if (typeof message !== 'undefined') { %>
+      <% if ( message ) { %>
         <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
           <%= message %>
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>

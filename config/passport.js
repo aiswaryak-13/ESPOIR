@@ -5,33 +5,46 @@ const env = require('dotenv').config();
 
 
 passport.use(new GoogleStrategy({
-  clientID:process.env.GOOGLE_CLIENT_ID,
+  clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL:'http://localhost:6001/auth/google/callback'
+  callbackURL: 'http://localhost:6001/auth/google/callback', 
+  passReqToCallback: true 
 },
-async(accessToken,refreshToken,profile,done)=>{
+async (req, accessToken, refreshToken, profile, done) => {
   try {
-    
-    let user = await User.findOne({googleId:profile.id});
-    if(user){
-      return done(null,user);
-    }else{
-      user = new User({
-        name:profile.displayName,
-        email:profile.emails[0].value,
-        googleId:profile.id,
+    const email = profile.emails[0].value;
+    const user = await User.findOne({ email: email });
 
-      });
-      await user.save();
-      return done(null,user);
+    const isSignup = req.session.googleSignup;
+
+    if (user) {
+      
+      if (!user.googleId) {
+        user.googleId = profile.id;
+        await user.save();
+      }
+      return done(null, user);
+    } else {
+     
+      if (isSignup) {
+        const newUser = new User({
+          name: profile.displayName,
+          email: email,
+          googleId: profile.id
+        });
+        await newUser.save();
+        return done(null, newUser);
+      } else {
+        return done(null, false, { message: "Email not found. Please sign up first." });
+      }
     }
 
   } catch (error) {
-    return done(error,null);
+    return done(error, null);
   }
-}
+}));
 
-));
+
 
 passport.serializeUser((user,done)=>{
  done(null,user.id)

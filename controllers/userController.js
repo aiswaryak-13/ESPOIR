@@ -30,7 +30,8 @@ const loadHomepage = async (req, res) => {
 
 const loadSignup = async (req,res) => {
   try {
-    return res.render('user/signup')
+    const message = req.query.error || null;
+    return res.render('user/signup',{message})
   } catch (error) {
     console.log('Home page not loading', error);
     res.status(500).send('Server Error');
@@ -244,10 +245,6 @@ const login = async (req,res) => {
       return res.render('user/login',{message:"User is blocked by Admin"});
     }
 
-    // if (!findUser.password) {
-    //   console.error(`No password hash found for user: ${findUser.email}`);
-    //   return res.render('user/login', { message: "Account issue. Contact support." });
-    // }
 
     const passwordMatch = await bcrypt.compare(password,findUser.password);
 
@@ -259,7 +256,6 @@ const login = async (req,res) => {
       _id: findUser._id,
       name: findUser.name,
       email: findUser.email,
-      // optionally add other properties you need like isBlocked
     };
     res.redirect('/');
 
