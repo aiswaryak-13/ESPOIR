@@ -10,8 +10,8 @@ const categoryInfo = async (req, res) => {
     const regex = new RegExp(search, 'i');
 
     const filter = search 
-      ? { name: { $regex: regex }, isListed: true }
-      : { isListed: true };
+      ? { name: { $regex: regex } }
+      : {};
 
     const categoryData = await Category.find(filter)
       .sort({ createdAt: -1 })
@@ -114,12 +114,17 @@ const updateCategory = async(req,res) =>{
 
 const deleteCategory = async(req,res)=>{
   try {
-    await Category.findByIdAndUpdate(req.params.id, {
-      isListed: false 
-    });
+    const category = await Category.findById(req.params.id);
+    if (!category) {
+      return res.status(404).send('Category not found');
+    }
+
+    category.isListed = !category.isListed;
+    await category.save();
+
     res.redirect('/admin/category');
   } catch (err) {
-    console.error('Error soft deleting category:', err);
+    console.error('Error toggling category listing:', err);
     res.redirect('/admin/category');
   }
 }

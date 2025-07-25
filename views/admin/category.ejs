@@ -71,7 +71,11 @@
                   <td class="text-start"><%= category.stocks %></td>
                   <td>
                     <a href="/admin/editCategory/<%= category._id %>" class="btn btn-sm btn-warning">Edit</a>
-                    <a href="/admin/deleteCategory/<%= category._id %>" class="btn btn-sm btn-danger">Delete</a>
+                    <% if (category.isListed) { %>
+                      <a href="/admin/deleteCategory/<%= category._id %>" class="btn btn-sm btn-danger">Delete</a>
+                    <% } else { %>
+                      <a href="/admin/deleteCategory/<%= category._id %>" class="btn btn-sm btn-success">Add</a>
+                    <% } %>
                   </td>
                 </tr>
               <% }) %>
