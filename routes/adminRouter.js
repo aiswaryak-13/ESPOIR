@@ -1,8 +1,12 @@
 const express = require('express');
 const router = express.Router();
+
+const upload = require('../config/multer');
+
 const adminController = require('../controllers/adminController');
 const customerController = require('../controllers/customerController');
 const categoryController = require('../controllers/categeoryController');
+const productController = require('../controllers/productController');
 const {adminAuth} = require('../middlewares/auth');
 
 router.get('/pageNotFound',adminController.pageNotFound);
@@ -25,5 +29,12 @@ router.get('/editCategory/:id',adminAuth,categoryController.editCategory);
 router.post('/editCategory/:id',adminAuth,categoryController.updateCategory);
 
 router.get('/deleteCategory/:id',adminAuth,categoryController.deleteCategory);
+
+router.get('/products',adminAuth,productController.productInfo);
+router.get('/addProduct',adminAuth,productController.loadAddProduct);
+router.post('/addProduct', upload.array('productImage', 5), productController.addProduct);
+router.get('/editProduct/:id',adminAuth,productController.loadEditProduct);
+router.post('/editProduct/:id', upload.array('productImage', 5), productController.editProduct);
+router.get('/deleteProduct/:id',adminAuth,productController.deleteProduct);
 
 module.exports = router;

@@ -10,10 +10,6 @@ const productSchema = new Schema({
     type:String,
     required:true
   },
-  brand:{
-    type:String,
-    required:true
-  },
   category:{
     type:Schema.Types.ObjectId,
     ref:"Category",
@@ -38,6 +34,14 @@ const productSchema = new Schema({
   color:{
     type:String,
     required:true
+  },
+  shape:{
+    type:String,
+    required:false
+  },
+  style:{
+    type:String,
+    required:false
   },
   productImage:{
     type:[String],
